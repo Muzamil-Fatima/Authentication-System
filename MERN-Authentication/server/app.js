@@ -1,8 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import {connection} from "../database/dbConnection.js"
+import {connection} from "./database/dbConnection.js"
 import dotenv from "dotenv";
+import { errorMiddleware } from "./middleware/error.js";
 dotenv.config();
 
 export const app = express();
@@ -20,3 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 connection();
+
+// error middleware at the last 
+app.use(errorMiddleware);
+
