@@ -1,8 +1,8 @@
 import ErrorHandler from "../middleware/error.js";
-import { catchAsyncError } from "../middleware/catchAsyncError";
+import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { User } from "../model/userModel.js";
 import { SendEmail } from "../utils/sendEmail.js";
-import { Twilio } from "twilio";
+import twilio from "twilio";
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 export const register = catchAsyncError(async (req, res, next) => {
@@ -12,7 +12,7 @@ export const register = catchAsyncError(async (req, res, next) => {
       return next(new ErrorHandler("All field are required", 400));
     }
     function validatePhoneNumber(phone) {
-      const phoneRegex = /^+923\d{9}$/;
+      const phoneRegex = /^\+923\d{9}$/;
       return phoneRegex.test(phone);
     }
     if (!validatePhoneNumber(phone)) {
