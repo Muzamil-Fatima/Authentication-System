@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { errorMiddleware } from "./middleware/error.js";
 import { connection } from "./database/dbConnection.js";
-import userRouter from "./router/userRouter.js"
+import userRouter from "./router/userRouter.js";
+import { removeUnverifiedAccounts } from "./automation/removeUnverifiedAccounts.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/user", userRouter);
+removeUnverifiedAccounts();
 
 // http://localhot:4000/api/v1/user/register
 
@@ -29,3 +31,5 @@ connection();
 
 // error middleware at the last
 app.use(errorMiddleware);
+
+// config({ path: "./config.env" });
