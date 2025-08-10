@@ -40,14 +40,15 @@ export const register = catchAsyncError(async (req, res, next) => {
       return next(new ErrorHandler("Phone or Email is already used.", 400));
     }
 
-    const registerationAttemptsByUser = await User.find({
+    
+    const registrationAttemptsByUser = await User.find({
       $or: [
         { phone, accountVerified: false },
         { email, accountVerified: false },
       ],
     });
 
-    if (registerationAttemptsByUser.length > 3) {
+    if (registrationAttemptsByUser.length > 3) {
       return next(
         new ErrorHandler(
           "You have exceeded the maximum number of attempts (3). Please try again after an hour.",
