@@ -18,7 +18,6 @@ export const register = catchAsyncError(async (req, res, next) => {
       const phoneRegex = /^\+923\d{9}$/;
       return phoneRegex.test(phone);
     }
-
     if (!validatePhoneNumber(phone)) {
       return next(new ErrorHandler("Invalid phone number.", 400));
     }
@@ -39,8 +38,6 @@ export const register = catchAsyncError(async (req, res, next) => {
     if (existingUser) {
       return next(new ErrorHandler("Phone or Email is already used.", 400));
     }
-
-    
     const registrationAttemptsByUser = await User.find({
       $or: [
         { phone, accountVerified: false },
@@ -56,14 +53,12 @@ export const register = catchAsyncError(async (req, res, next) => {
         )
       );
     }
-
     const userData = {
       name,
       email,
       phone,
       password,
     };
-
     const user = await User.create(userData);
     const verificationCode = await user.generateVerificationCode();
     await user.save();
@@ -79,6 +74,8 @@ export const register = catchAsyncError(async (req, res, next) => {
     next(error);
   }
 });
+
+// -----------------------------------------------------------------------------
 
 async function sendVerificationCode(
   verificationMethod,
