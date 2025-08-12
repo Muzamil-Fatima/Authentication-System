@@ -26,11 +26,11 @@ export const register = catchAsyncError(async (req, res, next) => {
       $or: [
         {
           email,
-          accountVerified: true,
+          accountVerified: false,
         },
         {
           phone,
-          accountVerified: true,
+          accountVerified: false,
         },
       ],
     });
