@@ -4,14 +4,14 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 const userSchema = new mongoose.Schema({
   name: String,
-  email: String,
+  email: { type: String, unique: true, required: true },
+  phone: { type: String, unique: true, required: true },
   password: {
     type: String,
     minLength: [8, "Password must have at least 8 characters."],
     maxLength: [32, "Password cannot have more than 32 characters."],
     select: false,
   },
-  phone: String,
   accountVerified: { type: Boolean, default: false },
   verificationCode: Number,
   verificationCodeExpire: Date,
@@ -26,11 +26,16 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next(); // if password is not modified just continue
   }
-  this.password = bcrypt.hash(this.password, 10);
+
+  // Proper await for hashing
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
+
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
+
 userSchema.methods.generateVerificationCode = function () {
   function generateRandomFiveDigitNumber() {
     const firstDigit = Math.floor(Math.random() * 9) + 1;

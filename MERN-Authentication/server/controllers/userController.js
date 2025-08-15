@@ -75,7 +75,6 @@ export const register = catchAsyncError(async (req, res, next) => {
   }
 });
 
-// -----------------------------------------------------------------------------
 
 async function sendVerificationCode(
   verificationMethod,
