@@ -1,6 +1,0 @@
-MERN-Auth/
-
-# Sensitive files
-.env
-node_modules/
-logic.js/
